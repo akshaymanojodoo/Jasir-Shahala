@@ -30,7 +30,7 @@ function json_(obj) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-// GET ?action=list -> newest first. Hide a wish by setting Approved = FALSE in the sheet.
+// GET ?action=list -> newest first. Hide a wish by unticking Approved in the sheet.
 function doGet(e) {
   const sh = getSheet_();
   const last = sh.getLastRow();
@@ -44,6 +44,17 @@ function doGet(e) {
   return json_({ wishes: wishes });
 }
 
+// First row (from row 2) whose Name cell is empty; adds a row if the sheet is full.
+function nextRow_(sh) {
+  const max = sh.getMaxRows();
+  const names = sh.getRange(1, 2, max, 1).getValues();
+  for (let i = 1; i < names.length; i++) {
+    if (names[i][0] === '') return i + 1;
+  }
+  sh.insertRowAfter(max);
+  return max + 1;
+}
+
 // POST {name, message}
 function doPost(e) {
   const lock = LockService.getScriptLock();
@@ -53,7 +64,10 @@ function doPost(e) {
     const name = safe_(body.name, MAX_NAME);
     const message = safe_(body.message, MAX_MESSAGE);
     if (!name || !message) return json_({ ok: false, error: 'missing' });
-    getSheet_().appendRow([new Date(), name, message, true]);
+    const sh = getSheet_();
+    const row = nextRow_(sh);
+    sh.getRange(row, 1, 1, 3).setValues([[new Date(), name, message]]);
+    sh.getRange(row, 4).insertCheckboxes().check();
     return json_({ ok: true });
   } catch (err) {
     return json_({ ok: false, error: 'server' });
