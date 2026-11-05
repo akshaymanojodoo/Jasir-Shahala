@@ -7,7 +7,7 @@
   var css = [
     ".wcar{display:none;max-width:560px;margin:26px auto 0}",
     ".wc-stage{position:relative;height:clamp(230px,58vw,260px);touch-action:pan-y;overflow:hidden}",
-    ".wc-stage .wish-entry{position:absolute;inset:0;margin:0;display:flex;flex-direction:column;justify-content:center;opacity:0;transform:translateX(18px);transition:opacity .6s ease,transform .6s ease;pointer-events:none}",
+    ".wc-stage .wish-entry{position:absolute;inset:0;margin:0;display:flex;flex-direction:column;justify-content:center;animation:none!important;opacity:0;transform:translateX(18px);transition:opacity .6s ease,transform .6s ease;pointer-events:none}",
     ".wc-stage .wish-entry.on{opacity:1;transform:none;pointer-events:auto}",
     ".wc-stage .wish-entry p{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}",
     ".wc-nav{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:10px;max-width:360px;margin:14px auto 0}",
